@@ -10,14 +10,13 @@ def minimize(fobj, boundaries, NP, F, Cr, x=mutation.rand, y=1, max_iter=100):
     min_boundaries, max_boundaries = np.asarray(boundaries).T
     diff = np.fabs(min_boundaries - max_boundaries)
 
-    denorm = lambda x: (x * diff) + min_boundaries
-    denorm_and_eval = lambda x: fobj_vectorized(denorm(x))
+    denorm_and_eval = lambda x: fobj_vectorized((x * diff) + min_boundaries)
 
     # step 1: init population
     population = np.random.uniform(-1, 1, (NP, DIM))
     fitness = denorm_and_eval(population)
 
-    for i in range(max_iter):
+    for _ in range(max_iter):
         # step 2: mutation
         idxs = np.arange(NP)
         a, bs, cs = x(idxs, fitness, NP, DIM, y)
@@ -35,8 +34,9 @@ def minimize(fobj, boundaries, NP, F, Cr, x=mutation.rand, y=1, max_iter=100):
 
         f_trial = denorm_and_eval(trial)
 
-        population[f_trial < fitness] = trial[f_trial < fitness]
-        fitness[f_trial < fitness] = f_trial[f_trial < fitness]
+        improved = f_trial < fitness
+        population[improved] = trial[improved]
+        fitness[improved] = f_trial[improved]
 
         best = np.argmin(fitness)
 
