@@ -12,12 +12,12 @@ def roullete(P, F):
     Retorna:
     object: O indivíduo selecionado.
     """
-
-    total_fitness = np.sum(F)
-    if total_fitness == 0:
-        probabilities = np.ones(len(F)) / len(F)
+    inverse_fitness = 1 / F
+    total_inverse_fitness = np.sum(inverse_fitness)
+    if total_inverse_fitness == 0:
+        probabilities = np.ones(len(inverse_fitness)) / len(inverse_fitness)
     else:
-        probabilities = F / total_fitness
+        probabilities = inverse_fitness / total_inverse_fitness
 
     selected_index = np.random.choice(len(P), p=probabilities)
 
