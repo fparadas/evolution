@@ -2,5 +2,6 @@ pymoo
 numpy
 pandas
 matplotlib
-jupyterlab
+jupyter
 tqdm
+pyswarms
